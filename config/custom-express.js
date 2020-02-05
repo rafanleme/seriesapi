@@ -9,8 +9,6 @@ const customExpress = () => {
 
   app.use(bodyParser.json())
 
-  autenticacaoCtrl(app)
-
   app.use((req,res,next)=> {
     const authHeader = req.headers.authorization
 
