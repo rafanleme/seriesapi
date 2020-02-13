@@ -1,8 +1,8 @@
 const { check, validationResult } = require('express-validator')
-const UsuarioValidator = require('../validators/Usuario')
+const usuarioDao = new (require('../models/Usuarios'))()
 const jwt = require('jsonwebtoken')
-
 const authConfig = require('../config/auth')
+const bcrypt = require('bcryptjs')
 
 gerarToken = (params) => {
 	console.log(params)
@@ -11,51 +11,45 @@ gerarToken = (params) => {
 	})
 }
 
-autenticacao = (app) => {
-
-	app.post('/registrar', UsuarioValidator.validacoes(),
-		(req, res) => {
-			const erros = validationResult(req)
-			if (!erros.isEmpty()) {
-				res.status(400).send(erros)
-				return
-			}
-			const usuario = req.body
-			usuarioDao = app.models.Usuarios
-			usuarioDao.insere(usuario)
-				.then(usuario => {
-					const token = gerarToken({id: usuario.id})
-					res.status(201).send({usuario, token})
-				})
-				.catch(erro => res.status(500).send(erro))
-		})
-
-	app.post('/autenticar',async (req,res) => {
-		const { email, senha } = req.body
-
+module.exports = {
+	
+	async registra(req,res){
+		const erros = validationResult(req)
+		if (!erros.isEmpty()) 
+			return res.status(400).send(erros)
+		
+		let usuario = req.body
 		try{
-			usuarioDao = app.models.Usuarios
-			const usuario = await usuarioDao.buscarPorEmail(email)
+			usuario.senha = await bcrypt.hash(usuario.senha, 10)
+			const resultado = await usuarioDao.insere(usuario)
+			usuario = {id: resultado.insertId, ...usuario}
+			res.status(201).send({
+				usuario, 
+				token: gerarToken({id: usuario.id})
+			})
+		}catch(erro){
+			return res.status(500).send(erro)
+		}
+	},
 
+	async autentica(req,res){
+		const { email, senha } = req.body
+		try{
+			let usuario = await usuarioDao.buscaPorEmail(email)
+			usuario = usuario[0]
 			if(!usuario)
 				return res.status(400).send({erro: 'Usuário não cadastrado'})
 
-			if(usuario.senha !== senha)
+			if(!await bcrypt.compare(senha, usuario.senha))
 				return res.status(400).send({erro: 'Senha inválida'})
 
-			const token = gerarToken({id: usuario.id})
-
-			res.send({usuario, token})
-
+			res.send({
+				usuario, 
+				token:  gerarToken({id: usuario.id})
+			})
 		}catch(erro){
 			console.log(erro)
 			res.status(500).send(erro)
 		}
-		
-
-
-	})
-
+	}
 }
-
-module.exports = autenticacao

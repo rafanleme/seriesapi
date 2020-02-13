@@ -17,6 +17,7 @@ module.exports = {
 
   async insere(req,res){
     let serie = req.body;
+    console.log(serie)
     try{
       const resultado = await seriesDAO.insere(serie)
       const insertId = resultado.insertId;
@@ -29,7 +30,8 @@ module.exports = {
 
   async buscaPorId(req,res){
     const id = req.params.id
-    const serie = await seriesDAO.buscaPorId(id)
+    let serie = await seriesDAO.buscaPorId(id)
+    serie = serie[0]
     if(!serie)
       return res.status(404).send({erro: 'série não encontrada'})
     res.send(serie)
@@ -49,7 +51,7 @@ module.exports = {
 
   async delete(req,res){
     const id = req.params.id
-    const retorno = await serieDAO.delete(id)
+    const retorno = await seriesDAO.delete(id)
     if(!retorno.affectedRows)
       return res.status(404).send({erro: 'Serie não encontrada'})
     res.status(204).send()

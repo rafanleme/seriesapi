@@ -6,7 +6,7 @@ class Usuarios {
 		return baseQuery('INSERT INTO usuarios SET ?',usuario)
 	}
 
-	buscarPorEmail(email){
+	buscaPorEmail(email){
 		return baseQuery(" SELECT * FROM usuarios WHERE email = ?",email)
 	}
 }
