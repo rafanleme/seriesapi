@@ -3,6 +3,7 @@ const serieCtrl = require('../controllers/series')
 
 router.get('/', serieCtrl.listar)
 router.post('/', serieCtrl.insere)
+router.post('/foto/:id', serieCtrl.uploadFoto)
 router.get('/:id', serieCtrl.buscaPorId)
 router.put('/:id', serieCtrl.atualiza)
 router.delete('/:id', serieCtrl.delete)

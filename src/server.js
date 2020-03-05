@@ -5,6 +5,8 @@ const authMidd = require('./middlewares/auth')
 
 app.use(express.json())
 
+app.use('/fotos', express.static('fotos'))
+
 app.use(cors())
 
 // let alowCrossDomain = (req,res,next) => {
@@ -20,11 +22,13 @@ app.use(cors())
 
 const auth = require('./routes/authRoutes')
 const series = require('./routes/seriesRoutes')
+const generos = require('./routes/generosRoutes')
 
 app.use('/auth', auth)
 
 app.use(authMidd)
 
 app.use('/series', series)
+app.use('/generos', generos)
 
 module.exports = app

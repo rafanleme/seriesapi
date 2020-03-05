@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs')
 gerarToken = (params) => {
 	console.log(params)
 	return jwt.sign(params, authConfig.secret,{
-		expiresIn: 900,
+		expiresIn: 10,
 	})
 }
 
