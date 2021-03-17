@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const autenticacaoCtrl = require('../controllers/autenticacao')
 const seriesCtrl = require('../controllers/series')
 
+//Esse arquivo ficava as configurações do projeto.
 const customExpress = () => {
 
   app.use(bodyParser.json())
