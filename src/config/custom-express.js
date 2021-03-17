@@ -6,6 +6,7 @@ const autenticacaoCtrl = require('../controllers/autenticacao')
 const seriesCtrl = require('../controllers/series')
 
 //Esse arquivo ficava as configurações do projeto.
+//Esse comentário vai gerar um problema danado.
 const customExpress = () => {
 
   app.use(bodyParser.json())
