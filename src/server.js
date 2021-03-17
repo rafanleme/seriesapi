@@ -32,3 +32,5 @@ app.use('/series', series)
 app.use('/generos', generos)
 
 module.exports = app
+
+//este é o arquivo que sobe o servidor no ar
