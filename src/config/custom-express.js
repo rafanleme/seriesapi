@@ -7,6 +7,7 @@ const seriesCtrl = require('../controllers/series')
 
 //Esse arquivo ficava as configurações do projeto.
 //Esse comentário vai gerar um problema danado.
+//Essas informações serão muito uteis.
 const customExpress = () => {
 
   app.use(bodyParser.json())
